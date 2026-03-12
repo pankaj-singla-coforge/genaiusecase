@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Insurance Dashboard
 
-## Getting Started
+Production-ready Next.js (App Router + TypeScript) dashboard for Excel/CSV analytics with schema inference, interactive charts, and rich table filtering.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router)
+- Tailwind CSS v4 + shadcn/ui
+- Recharts for charts
+- xlsx for client-side parsing
+- Zustand for state management (with persisted UI preferences)
+- react-hook-form + zod for upload validation
+- lucide-react + framer-motion for icons and subtle motion
+
+## Features
+
+- Upload `.xlsx`, `.xls`, `.csv` via drag-and-drop or file picker
+- Automatic schema inference:
+	- Column headers
+	- Type detection (`string`, `number`, `date`)
+	- Suggested dimension/measure/date columns
+- KPI cards:
+	- Total rows
+	- Numeric column count
+	- Distinct dimension count
+	- Aggregated measure (`sum`, `avg`, `count`, `min`, `max`)
+- Visualizations:
+	- Bar chart (dimension vs aggregated measure)
+	- Pie chart (Top 10 categories)
+	- Line chart by day/week/month when a date column exists
+- Data table:
+	- Sortable columns
+	- Pagination
+	- Column show/hide
+	- Export current view to CSV
+- Filtering:
+	- Global search
+	- Per-column text filter
+	- Date range filter
+- Dark mode by default, responsive layout, polished visuals, and clear empty/error states
+- Persisted user preferences in local storage (dimension, measure, aggregation, filters, etc.)
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+npm run start
+```
 
-## Learn More
+## Azure App Service Deployment Notes
 
-To learn more about Next.js, take a look at the following resources:
+This project is configured with:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `next.config.ts` -> `output: "standalone"`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Recommended App Service settings:
 
-## Deploy on Vercel
+- Runtime: Node.js 20 LTS
+- Startup command: `npm run start`
+- Build command: `npm run build`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Environment variables (if needed later):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `NODE_ENV=production`
+- `PORT` is managed by App Service
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run lint` - Run ESLint
+- `npm run build` - Create production build
+- `npm run start` - Start production server
